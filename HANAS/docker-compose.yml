@@ -1,0 +1,54 @@
+version: "3.1"
+services:
+    overseer:
+        build:
+            context: ./overseer
+            dockerfile: ./Dockerfile
+        ports:
+            - "4000:4000"
+        networks:
+            - all
+    worker:
+        build:
+            context: ./worker
+            dockerfile: ./Dockerfile
+        environment:
+            - PORT=3001
+            - OVERSEER_IP=http://overseer:4000
+            - MY_IP=http://worker:3001
+            - COMMON_DIR=/app/temp
+        ports:
+            - "3001:3001"
+        depends_on:
+            - overseer
+        volumes:
+            - common_dir:/app/temp
+        networks:
+            - worker_worker2
+            - all
+    worker2:
+        build:
+            context: ./worker
+            dockerfile: ./Dockerfile
+        environment:
+            - PORT=3000
+            - OVERSEER_IP=http://overseer:4000
+            - MY_IP=http://worker2:3000
+            - COMMON_DIR=/app/temp
+        ports:
+            - "3000:3000"
+        depends_on:
+            - overseer
+        volumes:
+            - common_dir:/app/temp
+        networks:
+            - worker_worker2
+            - all
+volumes:
+    common_dir:
+networks:
+    worker_worker2:
+    all:
+
+
+    
