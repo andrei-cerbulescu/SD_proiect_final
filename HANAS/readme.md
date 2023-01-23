@@ -24,6 +24,7 @@ We provided Docker images and a Docker compose.
 
 Build:
   * docker-compose up --build --always-recreate-deps
+
 Sometimes I needed to use to clear a stubborn volume that doesn't want to be created:
   * docker system prune
 
